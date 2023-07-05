@@ -36,19 +36,25 @@ const onFormFieldChange = throttle(event => {
   localStorage.setItem('feedback-form-state', JSON.stringify(userData));
 }, 500);
 
+let submittedData = {};
+
 const onFormSubmit = event => {
   event.preventDefault();
 
-  const submittedData = {
+  submittedData = {
     email: contactFormEl.elements.email.value,
     message: contactFormEl.elements.message.value,
   };
+  // submittedData.email = event.target.value;
+  // submittedData.message = event.target.value;
 
   console.log(submittedData);
 
   localStorage.removeItem('feedback-form-state');
   contactFormEl.reset();
 };
+
+console.log(submittedData);
 
 contactFormEl.addEventListener('input', onFormFieldChange);
 contactFormEl.addEventListener('submit', onFormSubmit);
