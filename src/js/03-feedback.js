@@ -2,26 +2,20 @@ import { throttle } from 'lodash';
 
 const contactFormEl = document.querySelector('.feedback-form');
 
-const userData = {};
+let userData = JSON.parse(localStorage.getItem('feedback-form-state')) || {};
 
 const fillFormFields = () => {
-  let dataFromLS;
-  try {
-    dataFromLS = JSON.parse(localStorage.getItem('feedback-form-state'));
-  } catch (error) {
-    console.log(error);
-  }
   //   console.dir(contactFormEl.elements);
   //     console.dir(dataFromLS);
-  if (dataFromLS === null) {
+  if (userData === null) {
     return;
   }
-  for (const prop in dataFromLS) {
-    if (prop === 'email') {
-      contactFormEl.elements[prop].value = dataFromLS[prop];
+  for (const prop in userData) {
+    if (prop === 'email' || prop === 'message') {
+      contactFormEl.elements[prop].value = userData[prop];
       //   Перебираем полученный распарсенный JSON массив из функции onFormFieldChange (данные, которые ввел пользователь. А так как elements (ключи) contactFormEl совпадают с ключами dataFromLS, присваиваем значение (value) этих ключей через [prop].value)
     } else {
-      userData[prop] = dataFromLS[prop];
+      return;
     }
   }
 };
@@ -36,25 +30,15 @@ const onFormFieldChange = throttle(event => {
   localStorage.setItem('feedback-form-state', JSON.stringify(userData));
 }, 500);
 
-let submittedData = {};
-
 const onFormSubmit = event => {
   event.preventDefault();
-
-  submittedData = {
-    email: contactFormEl.elements.email.value,
-    message: contactFormEl.elements.message.value,
-  };
-  // submittedData.email = event.target.value;
-  // submittedData.message = event.target.value;
-
-  console.log(submittedData);
-
+  console.log(userData);
   localStorage.removeItem('feedback-form-state');
   contactFormEl.reset();
+  userData = {};
 };
 
-console.log(submittedData);
+// console.log(submittedData);
 
 contactFormEl.addEventListener('input', onFormFieldChange);
 contactFormEl.addEventListener('submit', onFormSubmit);
