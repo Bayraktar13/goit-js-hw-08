@@ -14,8 +14,6 @@ const fillFormFields = () => {
     if (prop === 'email' || prop === 'message') {
       contactFormEl.elements[prop].value = userData[prop];
       //   Перебираем полученный распарсенный JSON массив из функции onFormFieldChange (данные, которые ввел пользователь. А так как elements (ключи) contactFormEl совпадают с ключами dataFromLS, присваиваем значение (value) этих ключей через [prop].value)
-    } else {
-      return;
     }
   }
 };
